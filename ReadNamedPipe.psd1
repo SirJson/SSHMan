@@ -21,13 +21,13 @@ ModuleVersion = '1.0.0'
 GUID = '286de10b-5431-4941-8753-de95f8ef6cc9'
 
 # Author of this module
-Author = 'SirJson'
+Author = 'Raffael Zica'
 
 # Company or vendor of this module
-CompanyName = 'SirJson'
+CompanyName = 'Pixeltastic'
 
 # Copyright statement for this module
-Copyright = '(c) SirJson. All rights reserved.'
+Copyright = '(c) Raffael Zica. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Helper for reading string data from named pipes'
@@ -98,10 +98,10 @@ PrivateData = @{
         Tags = @("IPC","NamedPipe","Windows","Win32","dotnet")
 
         # A URL to the license for this module.
-        LicenseUri = ''
+        LicenseUri = 'https://raw.githubusercontent.com/SirJson/SSHMan/master/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/SirJson/SSHMan'
 
         # A URL to an icon representing this module.
         # IconUri = ''

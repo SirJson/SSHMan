@@ -61,9 +61,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ReadNamedPipeCmdlet.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
     <None Update="sshchild.ps1">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>

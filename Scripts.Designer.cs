@@ -63,6 +63,26 @@ namespace SSHMan {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] ModuleDefinition {
+            get {
+                object obj = ResourceManager.GetObject("ModuleDefinition", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] ReadNamedPipeCmdlet {
+            get {
+                object obj = ResourceManager.GetObject("ReadNamedPipeCmdlet", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] sshchild {
             get {
                 object obj = ResourceManager.GetObject("sshchild", resourceCulture);

@@ -25,7 +25,7 @@ namespace SSHMan
     /// </summary>
     public partial class App : Application
     {
-        public static string DataPath, LogPath, ScriptPath, ModulePath;
+        public static string DataPath, LogPath, ScriptPath;
         static readonly Mutex singleAppMutex = new Mutex(true, "{14E68EB5-8922-4752-B03C-D3D672135FA6}");
 
         public static void Panic(string message)
@@ -42,22 +42,34 @@ namespace SSHMan
             }
         }
 
+        private void InstallIfNotExists(string file, byte[] data)
+        {
+            if(File.Exists(file)) return;
+            Log.Information("Installing {file}", file);
+            File.WriteAllBytes(file, data);
+        }
+
         private void InstallAssets() {
-            Log.Debug("Installing {file}", ScriptPath);
-            File.WriteAllBytes(ScriptPath, Scripts.sshchild);
-            //var modPath = Environment.GetEnvironmentVariable("PSModulePath").Split(";").First();
+            var modDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"PowerShell","Modules","ReadNamedPipe");
+            var modDefinition = Path.Combine(modDir, "ReadNamedPipe.psd1");
+            var modAssembly = Path.Combine(modDir, "ReadNamedPipeCmdlet.dll");
+            EnsureDirectory(modDir);
+            InstallIfNotExists(ScriptPath,Scripts.sshchild);
+            InstallIfNotExists(modDefinition,Scripts.ModuleDefinition);
+            InstallIfNotExists(modAssembly,Scripts.ReadNamedPipeCmdlet);
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             if (singleAppMutex.WaitOne(TimeSpan.Zero, true))
             {
+
                 DataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SSHMan");
                 ScriptPath = Path.Combine(DataPath, "sshchild.ps1");
-                ModulePath = Path.Combine(DataPath, "ReadNamedPipeCmdlet.dll");
-                EnsureDirectory(DataPath);
-                InstallAssets();
                 LogPath = Path.Combine(DataPath, "sshman.log");
+
+                EnsureDirectory(DataPath);
+
                 if (e.Args.Length > 0 && e.Args[0] == "-d")
                 {
                     DebugLogger();
@@ -66,6 +78,10 @@ namespace SSHMan
                 {
                     StandardLogger();
                 }
+
+                InstallAssets();
+               
+
             }
             else
             {
