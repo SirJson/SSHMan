@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SSHMan": {
+      "commandName": "Project",
+      "commandLineArgs": "-d"
+    }
+  }
+}

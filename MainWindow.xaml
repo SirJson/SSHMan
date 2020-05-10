@@ -1,0 +1,101 @@
+﻿<mah:MetroWindow x:Class="SSHMan.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:SSHMan"
+        mc:Ignorable="d"
+        Title="SSHMan" 
+        SizeToContent="Height"
+        Width="384"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Icon="pack://application:,,,/sshman2.ico"
+        ShowIconOnTitleBar="True"
+        TitleCharacterCasing="Normal"
+                 Closed="MetroWindow_Closed">
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <Button x:Name="settingsBnt" Click="SettingsBntClick" ToolTip="Settings">
+                <Image Width="22" Height="22" Source="pack://application:,,,/menuburger.png"></Image>
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+    <mah:MetroWindow.Flyouts>
+        <mah:FlyoutsControl>
+            <mah:Flyout x:Name="settingsFlyout" Header="Settings" Position="Right" Width="200">
+                <StackPanel Margin="16,0,16,0" Orientation="Vertical">
+                    <mah:ToggleSwitch Margin="0 10 0 5"
+                                       Header="Keep Launcher open"
+                                       IsOn="True" Name="launcherToggle" Toggled="LauncherToggleToggled" />
+                    <Button Width="168" x:Name="configBnt" Content="Open SSH Config" Click="ConfigClick"></Button> 
+                </StackPanel>
+            </mah:Flyout>
+        </mah:FlyoutsControl>
+    </mah:MetroWindow.Flyouts>
+
+    <Window.Resources>
+
+        <DataTemplate x:Key="HostTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{Binding Path=Icon}"
+                   Width="24"
+                   Height="24"/>
+                <TextBlock Margin="8,0,0,0" Text="{Binding Name}"
+                       VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DoubleLineDataTemplate">
+            <StackPanel Orientation="Horizontal" Height="64">
+                <Ellipse Height="48" Width="48" VerticalAlignment="Center">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding Path=Icon}"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="12,0,0,0">
+                    <TextBlock  Text="{Binding Name}"  />
+                    <TextBlock  Text="{Binding Address}"/>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+    </Window.Resources>
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="8"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="16"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="16"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+
+
+        <DockPanel Grid.Row="1" Grid.Column="1">
+            <mah:MetroHeader DockPanel.Dock="Top" FontSize="20" Content="Remote SSH hosts"></mah:MetroHeader>
+            <Separator DockPanel.Dock="Top" Margin="0,8,0,8"></Separator>
+            <ListView MaxHeight="400" DockPanel.Dock="Top" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource DoubleLineDataTemplate}" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="sshMenu"></ListView>
+            <Separator DockPanel.Dock="Top" Margin="0,8,0,4"></Separator>
+            <Grid DockPanel.Dock="Bottom" Margin="0,8,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="8"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="3" x:Name="Connect" Click="Connect_Click">Connect</Button>
+            </Grid>
+        </DockPanel>
+
+
+
+
+    </Grid>
+</mah:MetroWindow>

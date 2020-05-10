@@ -1,0 +1,27 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Publish build",
+            "type": "shell",
+            "windows":{
+                "command": "dotnet",
+                "args": ["publish", "-c", "Release", "-o", "publish"],
+                "options": {"cwd": "${workspaceFolder}"},
+                "problemMatcher": "$msCompile"
+            },
+        },
+        {
+            "label": "Publish",
+            "type": "shell",
+            "dependsOn": "Publish build",
+            "windows":{
+                "command": "pwsh",
+                "args": ["-File", "${workspaceFolder}/copyassembly.ps1"],
+                "options": {"cwd": "${workspaceFolder}"}},
+            },
+        }
+    ]
+}

@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>sshman2.ico</ApplicationIcon>
+    <StartupObject>SSHMan.App</StartupObject>
+    <Authors>SirJson</Authors>
+    <Company>SirJson</Company>
+    <Description>Quickly connect to your SSH server</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="SSHChild\**" />
+    <EmbeddedResource Remove="SSHChild\**" />
+    <None Remove="SSHChild\**" />
+    <Page Remove="SSHChild\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="host.png" />
+    <None Remove="menuburger.png" />
+    <None Remove="sshman2.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.0.0-alpha0775" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="host.png" />
+    <Resource Include="menuburger.png" />
+    <Resource Include="sshman2.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Scripts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scripts.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Scripts.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Scripts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ReadNamedPipeCmdlet.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="sshchild.ps1">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
