@@ -98,15 +98,22 @@ namespace SSHMan
                 deadThreads.Add(workId);
             }
         }
+
         private void Connect_Click(object sender, RoutedEventArgs e) {
             var host = this.sshMenu.SelectedItem as SSHHostEntry;
+            Connect(host);
+        }
+
+
+        private void Connect(SSHHostEntry host)
+        {
             var workId = Guid.NewGuid();
             var msghandle = PowerShellIPC.Message(host.Name, exitAfterDelivery: !keepOpen, workId);
             var thread = new Thread(() => this.LaunchSSHSession(host.Name, workId));
             thread.Start();
-            Log.Debug("Thread ({id}) started with work id: {workid}", thread.ManagedThreadId,workId);
+            Log.Debug("Thread ({id}) started with work id: {workid}", thread.ManagedThreadId, workId);
             threads[workId] = thread;
-            
+
             if (!keepOpen)
             {
                 ShutdownSignal.Wait();
@@ -117,18 +124,14 @@ namespace SSHMan
 
         private void ConfigClick(object sender, RoutedEventArgs e)
         {
-            model.Clear();
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var proc = new Process() { StartInfo = new ProcessStartInfo() { FileName = "notepad", ArgumentList = { Path.Combine(home,".ssh","config").ToString() }, LoadUserProfile = true, UseShellExecute = true } };
             _ = proc.Start();
             proc.WaitForExit();
+            model.Clear();
             model.Update();
         }
 
-        private void ConfigDebugClick(object sender, RoutedEventArgs e)
-        {
-           
-        }
 
         private void SettingsBntClick(object sender, RoutedEventArgs e) => this.settingsFlyout.IsOpen = !this.settingsFlyout.IsOpen;
 
@@ -149,6 +152,12 @@ namespace SSHMan
                 }
             }
             ShutdownSignal.Dispose();
+        }
+
+        private void SSHMenu_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var host = this.sshMenu.SelectedItem as SSHHostEntry;
+            Connect(host);
         }
     }
 }

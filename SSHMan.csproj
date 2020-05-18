@@ -9,6 +9,12 @@
     <Authors>SirJson</Authors>
     <Company>SirJson</Company>
     <Description>Quickly connect to your SSH server</Description>
+    <Version>1.1.0</Version>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/SirJson/SSHMan</PackageProjectUrl>
+    <PackageIcon>sshman-icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/SirJson/SSHMan</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,12 +25,20 @@
     <Compile Remove="SSHChild\**" />
     <EmbeddedResource Remove="SSHChild\**" />
     <None Remove="SSHChild\**" />
+    <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="sshman-icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <Page Remove="SSHChild\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="host.png" />
-    <None Remove="menuburger.png" />
+    <None Remove="settings.png" />
     <None Remove="sshman2.ico" />
   </ItemGroup>
 
@@ -41,7 +55,7 @@
 
   <ItemGroup>
     <Resource Include="host.png" />
-    <Resource Include="menuburger.png" />
+    <Resource Include="settings.png" />
     <Resource Include="sshman2.ico" />
   </ItemGroup>
 

@@ -8,17 +8,17 @@
         mc:Ignorable="d"
         Title="SSHMan" 
         SizeToContent="Height"
-        Width="384"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         Icon="pack://application:,,,/sshman2.ico"
-        ShowIconOnTitleBar="True"
+        Width="500"
+        Height="600"
         TitleCharacterCasing="Normal"
-                 Closed="MetroWindow_Closed">
+                 Closed="MetroWindow_Closed" WindowState="Normal" Topmost="False" ShowInTaskbar="False" mah:ScrollViewerHelper.IsHorizontalScrollWheelEnabled="False">
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <Button x:Name="settingsBnt" Click="SettingsBntClick" ToolTip="Settings">
-                <Image Width="22" Height="22" Source="pack://application:,,,/menuburger.png"></Image>
+                <Image Width="22" Height="22" Source="pack://application:,,,/settings.png"></Image>
             </Button>
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
@@ -47,6 +47,17 @@
             </StackPanel>
         </DataTemplate>
 
+        <Style TargetType="ListViewItem">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                    <Setter Property="Background" Value="#5D5A58" />
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                    <Setter Property="Background" Value="#4C4A48" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <DataTemplate x:Key="DoubleLineDataTemplate">
             <StackPanel Orientation="Horizontal" Height="64">
                 <Ellipse Height="48" Width="48" VerticalAlignment="Center">
@@ -55,8 +66,8 @@
                     </Ellipse.Fill>
                 </Ellipse>
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="12,0,0,0">
-                    <TextBlock  Text="{Binding Name}"  />
-                    <TextBlock  Text="{Binding Address}"/>
+                    <TextBlock FontSize="20" FontWeight="Regular" FontFamily="Segoe UI" Text="{Binding Name}"  />
+                    <TextBlock FontSize="14" FontWeight="SemiBold"  FontFamily="Segoe UI" Text="{Binding Address}"/>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
@@ -79,18 +90,24 @@
 
 
         <DockPanel Grid.Row="1" Grid.Column="1">
-            <mah:MetroHeader DockPanel.Dock="Top" FontSize="20" Content="Remote SSH hosts"></mah:MetroHeader>
-            <Separator DockPanel.Dock="Top" Margin="0,8,0,8"></Separator>
-            <ListView MaxHeight="400" DockPanel.Dock="Top" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource DoubleLineDataTemplate}" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="sshMenu"></ListView>
-            <Separator DockPanel.Dock="Top" Margin="0,8,0,4"></Separator>
-            <Grid DockPanel.Dock="Bottom" Margin="0,8,0,8">
+            <Grid  DockPanel.Dock="Top"  Margin="0,8,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="46"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <mah:FontIcon Grid.Column="0" FontFamily="Segoe MDL2 Assets" Glyph="&#xE703;" HorizontalAlignment="Left" FontSize="34"></mah:FontIcon>
+                <mah:MetroHeader Grid.Column="1" FontSize="34" FontWeight="Light" Content="Remote SSH hosts" FontFamily="Segoe UI"></mah:MetroHeader>
+            </Grid>
+            <ListView MouseDoubleClick="SSHMenu_MouseDoubleClick" AlternationCount="2" MaxHeight="516" DockPanel.Dock="Top" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource DoubleLineDataTemplate}" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="sshMenu"></ListView>
+                
+            <Grid DockPanel.Dock="Bottom" Margin="0,16,0,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="8"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="3" x:Name="Connect" Click="Connect_Click">Connect</Button>
+                <Button Grid.Column="3" x:Name="ConnectBnt" Click="Connect_Click">Connect</Button>
             </Grid>
         </DockPanel>
 
