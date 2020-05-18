@@ -61,6 +61,21 @@ namespace SSHMan {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Host youralias1
+        ///	HostName somecomputer.domain
+        ///	User joe
+        ///	Port 1337
+        ///Host youralias2
+        ///	HostName 127.0.1.1
+        ///	User john.
+        /// </summary>
+        internal static string example_ssh {
+            get {
+                return ResourceManager.GetString("example_ssh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] ModuleDefinition {

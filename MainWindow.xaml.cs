@@ -31,10 +31,10 @@ namespace SSHMan
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-       
+
         private readonly HostModel model = new HostModel();
         private bool keepOpen = true;
-        private readonly Dictionary<Guid,Thread> threads = new Dictionary<Guid, Thread>();
+        private readonly Dictionary<Guid, Thread> threads = new Dictionary<Guid, Thread>();
         private readonly ConcurrentBag<Guid> deadThreads = new ConcurrentBag<Guid>();
         public static ManualResetEventSlim ShutdownSignal = new ManualResetEventSlim(false);
 
@@ -55,9 +55,9 @@ namespace SSHMan
 
         private void LaunchSSHSession(string target, Guid workId)
         {
-            Log.Information("Connecting to {host}",target);
+            Log.Information("Connecting to {host}", target);
 
-            var wtpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Microsoft","WindowsApps","wt.exe");
+            var wtpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Microsoft", "WindowsApps", "wt.exe");
             Log.Information("Executing client script...");
             using (var proc = new Process()
             {
@@ -70,8 +70,9 @@ namespace SSHMan
                     StandardErrorEncoding = Encoding.Unicode,
                 },
                 EnableRaisingEvents = true,
-           
-            }) { 
+
+            })
+            {
                 proc.Exited += this.Proc_Exited;
                 proc.ErrorDataReceived += this.Proc_ErrorDataReceived;
                 var success = proc.Start();
@@ -94,12 +95,13 @@ namespace SSHMan
                     _ = MessageBox.Show(err, "Connection failed", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 var workId = new Guid(handle.StartInfo.ArgumentList.Last());
-                Log.Debug("Thread with work id {id} died and was added to the queue",workId);
+                Log.Debug("Thread with work id {id} died and was added to the queue", workId);
                 deadThreads.Add(workId);
             }
         }
 
-        private void Connect_Click(object sender, RoutedEventArgs e) {
+        private void Connect_Click(object sender, RoutedEventArgs e)
+        {
             var host = this.sshMenu.SelectedItem as SSHHostEntry;
             Connect(host);
         }
@@ -124,8 +126,16 @@ namespace SSHMan
 
         private void ConfigClick(object sender, RoutedEventArgs e)
         {
-            var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            var proc = new Process() { StartInfo = new ProcessStartInfo() { FileName = "notepad", ArgumentList = { Path.Combine(home,".ssh","config").ToString() }, LoadUserProfile = true, UseShellExecute = true } };
+            var localsshdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".ssh");
+            var localsshcfg = Path.Combine(localsshdir, "config");
+            App.EnsureDirectory(localsshdir);
+
+            if (!File.Exists(localsshcfg))
+            {
+                File.WriteAllText(localsshcfg, Scripts.example_ssh);
+            }
+
+            var proc = new Process() { StartInfo = new ProcessStartInfo() { FileName = "notepad", ArgumentList = { localsshcfg }, LoadUserProfile = true, UseShellExecute = true } };
             _ = proc.Start();
             proc.WaitForExit();
             model.Clear();
@@ -141,13 +151,13 @@ namespace SSHMan
             Log.Debug("Found {count} dead threads. Beginning with cleanup", deadThreads.Count);
             foreach (var corpse in deadThreads)
             {
-                
-                if(threads[corpse].ThreadState == System.Threading.ThreadState.Unstarted) continue;
+
+                if (threads[corpse].ThreadState == System.Threading.ThreadState.Unstarted) continue;
                 Log.Debug("\t > .. joining Thread {id}", threads[corpse].ManagedThreadId);
                 var success = threads[corpse].Join(TimeSpan.FromSeconds(3));
-                if(!success)
+                if (!success)
                 {
-                    Log.Error("Thread (id) stopped responding and will be terminated",threads[corpse].ManagedThreadId);
+                    Log.Error("Thread (id) stopped responding and will be terminated", threads[corpse].ManagedThreadId);
                     threads[corpse].Abort();
                 }
             }

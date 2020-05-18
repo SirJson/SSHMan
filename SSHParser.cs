@@ -32,6 +32,15 @@ namespace SSHMan {
         }
 
         public Dictionary<string, ConfigEntry> HostMap () {
+            var localsshdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".ssh");
+            var localsshcfg = Path.Combine(localsshdir, "config");
+            App.EnsureDirectory(localsshdir);
+
+            if (!File.Exists(localsshcfg))
+            {
+                File.WriteAllText(localsshcfg, Scripts.example_ssh);
+            }
+
             var output = new Dictionary<string, ConfigEntry> ();
             var home = GetFolderPath (SpecialFolder.UserProfile);
             var input = File.ReadAllText (Path.Join (home, UserSSHConfig));
