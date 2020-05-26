@@ -7,7 +7,7 @@ namespace SSHMan
     public class SSHHostEntry: DefaultModel
     {
 
-        public const string Icon = "pack://application:,,,/host.png";
+        public static string Icon => "pack://application:,,,/host.png";
 
         private string name, address;
 
