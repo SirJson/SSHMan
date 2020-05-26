@@ -6,11 +6,19 @@ using System.Windows.Controls;
 
 namespace SSHMan
 {
-    public class InnerMargin
+    public static class InnerMargin
     {
-        private static Thickness GetLastItemMargin(Panel obj) => (Thickness)obj.GetValue(LastItemMarginProperty);
+        private static Thickness GetLastItemMargin(Panel obj)
+        {
+            if(obj is null) { throw new ArgumentNullException(nameof(obj)); }
+            return (Thickness)obj.GetValue(LastItemMarginProperty);
+        }
 
-        public static Thickness GetMargin(DependencyObject obj) => (Thickness)obj.GetValue(MarginProperty);
+        public static Thickness GetMargin(DependencyObject obj)
+        {
+            if(obj is null) { throw new ArgumentNullException(nameof(obj)); }
+            return (Thickness)obj.GetValue(MarginProperty);
+        }
 
         private static void MarginChangedCallback(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -42,9 +50,17 @@ namespace SSHMan
             }
         }
 
-        public static void SetLastItemMargin(DependencyObject obj, Thickness value) => obj.SetValue(LastItemMarginProperty, value);
+        public static void SetLastItemMargin(DependencyObject obj, Thickness value)
+        {
+            if(obj is null) { throw new ArgumentNullException(nameof(obj)); }
+            obj.SetValue(LastItemMarginProperty, value);
+        }
 
-        public static void SetMargin(DependencyObject obj, Thickness value) => obj.SetValue(MarginProperty, value);
+        public static void SetMargin(DependencyObject obj, Thickness value)
+        {
+            if(obj is null) { throw new ArgumentNullException(nameof(obj)); }
+            obj.SetValue(MarginProperty, value);
+        }
 
         // Using a DependencyProperty as the backing store for Margin.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MarginProperty =

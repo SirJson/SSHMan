@@ -15,12 +15,12 @@ namespace SSHMan
 {
     public class MessageItem
     {
-        public Guid Id;
-        public string Data;
-        public bool LastMessage;
+        public Guid Id { get; set; }
+        public string Data { get; set; }
+        public bool LastMessage { get; set; }
     }
 
-    public class PowerShellIPC
+    public static class PwshIPC
     {
         public static MessageItem Message(string message, bool exitAfterDelivery, Guid id)
         {
@@ -41,6 +41,9 @@ namespace SSHMan
 
         public static void ProvideMessage(object payload)
         {
+            if(payload == null) {
+                throw new ArgumentNullException(nameof(payload));
+            }
             var message = (MessageItem)payload;
             var pipename = $"sshmancom-{message.Id}";
             var pipeServer = new NamedPipeServerStream(pipename, PipeDirection.InOut, 1);
@@ -59,7 +62,7 @@ namespace SSHMan
             }
             catch (IOException e)
             {
-                _ = MessageBox.Show(string.Format("ERROR: {0}", e.Message), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = MessageBox.Show($"ERROR: {e.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {

@@ -1,31 +1,21 @@
 ﻿using System;
 using Serilog;
-using Serilog.Configuration;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+
 using System.Windows;
 using System.IO;
 using System.Threading;
-using ControlzEx.Standard;
+
 
 namespace SSHMan
 {
-    public static class Kernel32
-    {
-        [DllImport("kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool AllocConsole();
-    }
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
-        public static string DataPath, LogPath, ScriptPath;
+        public static string DataPath { get; private set; }
+        public static string ScriptPath { get; private set; }
+        public static string LogPath { get; private set; }
         static readonly Mutex singleAppMutex = new Mutex(true, "{529A6125-B42E-49A8-B289-216D8FFE45B8}");
 
         public static void Panic(string message)
@@ -42,14 +32,14 @@ namespace SSHMan
             }
         }
 
-        private void InstallIfNotExists(string file, byte[] data)
+        private static void InstallIfNotExists(string file, byte[] data)
         {
             if(File.Exists(file)) return;
             Log.Information("Installing {file}", file);
             File.WriteAllBytes(file, data);
         }
 
-        private void InstallAssets() {
+        private static void InstallAssets() {
             var modDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"PowerShell","Modules","ReadNamedPipe");
             var modDefinition = Path.Combine(modDir, "ReadNamedPipe.psd1");
             var modAssembly = Path.Combine(modDir, "ReadNamedPipeCmdlet.dll");
@@ -83,7 +73,9 @@ namespace SSHMan
             }
             else
             {
-                MessageBox.Show("Prevented startup because SSHMan is already running", "Abort", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var hwnd = NativeMethods.FindWindow(null,"SSHMan");
+                NativeMethods.ShowWindow(hwnd,NativeMethods.Win32ShowCmd.Restore);
+                NativeMethods.SetForegroundWindow(hwnd);
                 this.Shutdown();
             }
         }
@@ -95,9 +87,9 @@ namespace SSHMan
             singleAppMutex.Dispose();
         }
 
-        private void DebugLogger()
+        private static void DebugLogger()
         {
-            if (!Kernel32.AllocConsole())
+            if (!NativeMethods.AllocConsole())
             {
                 Panic("Failed to allocate console");
             }
@@ -109,7 +101,7 @@ namespace SSHMan
                             .CreateLogger();
         }
 
-        private void StandardLogger()
+        private static void StandardLogger()
         {
             Log.Logger = new LoggerConfiguration()
                             .MinimumLevel.Information()

@@ -2,36 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using static System.Environment;
 
-namespace SSHMan {
+namespace SSHMan
+{
 
-    public class SSHParser {
+    public static class SSHParser {
         const string ConfigPattern = @"(Host\s[\w\*]+)(\n\s+\w+\s.*)+";
         const string UserSSHConfig = ".ssh/config";
-        const string CfgKeyHost = "hostname";
-        const string CfgKeyPort = "port";
 
-        public struct ConfigEntry {
-            public string Host;
-            public Dictionary<string, string> Data;
-
-            public SSHHostEntry ToEntry()
-            {
-                var ip = Data.Keys.Contains(CfgKeyHost) ? Data[CfgKeyHost] : "-";
-                var port = Data.Keys.Contains(CfgKeyPort) ? Data[CfgKeyPort] : "22";
-                return new SSHHostEntry()
-                {
-                    Name = Host,
-                    Address = $"{ip}:{port}"
-                };
-            }
-        }
-
-        public Dictionary<string, ConfigEntry> HostMap () {
+        public static Dictionary<string, ConfigEntry> MapHosts () {
             var localsshdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".ssh");
             var localsshcfg = Path.Combine(localsshdir, "config");
             App.EnsureDirectory(localsshdir);
@@ -48,7 +30,7 @@ namespace SSHMan {
             var options = RegexOptions.Multiline | RegexOptions.CultureInvariant;
 
             foreach (Match m in Regex.Matches (input, ConfigPattern, options)) {
-                var entry = new ConfigEntry() { Data = new Dictionary<string, string>()};
+                var entry = ConfigEntry.Create();
                 var data = m.Value.Split('\n');
                 var host = data[0].Split("Host")[1].Trim();
                 if(host == "*") continue;
@@ -56,7 +38,7 @@ namespace SSHMan {
                 for (var i = 1; i < data.Length; i++)
                 {
                     (var key, var value, _) = data[i].Trim().Split(' ');
-                    entry.Data.Add(key.ToLowerInvariant(), value);
+                    entry.Data.Add(key.ToUpperInvariant(), value);
                 }
                 output[entry.Host] = entry;
             }

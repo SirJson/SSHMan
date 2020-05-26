@@ -1,14 +1,22 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
+using System;
 
 
 namespace SSHMan
 {
-    public class Spacing
+    public static class Spacing
     {
-        public static double GetHorizontal(DependencyObject obj) => (double)obj.GetValue(HorizontalProperty);
+        public static double GetHorizontal(DependencyObject obj)
+        {
+            if(obj is null) { throw new ArgumentNullException(nameof(obj)); }
+            return (double)obj.GetValue(HorizontalProperty);
+        }
 
-        public static double GetVertical(DependencyObject obj) => (double)obj.GetValue(VerticalProperty);
+        public static double GetVertical(DependencyObject obj)
+        {
+            if(obj is null) { throw new ArgumentNullException(nameof(obj)); }
+            return (double)obj.GetValue(VerticalProperty);
+        }
 
         private static void HorizontalChangedCallback(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -20,10 +28,17 @@ namespace SSHMan
         }
 
 
-        public static void SetHorizontal(DependencyObject obj, double space) => obj.SetValue(HorizontalProperty, space);
+        public static void SetHorizontal(DependencyObject obj, double space)
+        {
+            if(obj is null) { throw new ArgumentNullException(nameof(obj)); }
+            obj.SetValue(HorizontalProperty, space);
+        }
 
-
-        public static void SetVertical(DependencyObject obj, double value) => obj.SetValue(VerticalProperty, value);
+        public static void SetVertical(DependencyObject obj, double value)
+        {
+            if(obj is null) { throw new ArgumentNullException(nameof(obj)); }
+            obj.SetValue(VerticalProperty, value);
+        }
 
         private static void VerticalChangedCallback(object sender, DependencyPropertyChangedEventArgs e)
         {

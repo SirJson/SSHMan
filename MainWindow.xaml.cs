@@ -3,25 +3,13 @@ using Serilog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 using Path = System.IO.Path;
 
 namespace SSHMan
@@ -31,12 +19,11 @@ namespace SSHMan
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-
         private readonly HostModel model = new HostModel();
         private bool keepOpen = true;
         private readonly Dictionary<Guid, Thread> threads = new Dictionary<Guid, Thread>();
         private readonly ConcurrentBag<Guid> deadThreads = new ConcurrentBag<Guid>();
-        public static ManualResetEventSlim ShutdownSignal = new ManualResetEventSlim(false);
+        public readonly static ManualResetEventSlim ShutdownSignal = new ManualResetEventSlim(false);
 
 
         public MainWindow()
@@ -110,7 +97,7 @@ namespace SSHMan
         private void Connect(SSHHostEntry host)
         {
             var workId = Guid.NewGuid();
-            var msghandle = PowerShellIPC.Message(host.Name, exitAfterDelivery: !keepOpen, workId);
+            var msghandle = PwshIPC.Message(host.Name, exitAfterDelivery: !keepOpen, workId);
             var thread = new Thread(() => this.LaunchSSHSession(host.Name, workId));
             thread.Start();
             Log.Debug("Thread ({id}) started with work id: {workid}", thread.ManagedThreadId, workId);
@@ -135,7 +122,7 @@ namespace SSHMan
                 File.WriteAllText(localsshcfg, Scripts.example_ssh);
             }
 
-            var proc = new Process() { StartInfo = new ProcessStartInfo() { FileName = "notepad", ArgumentList = { localsshcfg }, LoadUserProfile = true, UseShellExecute = true } };
+            using var proc = new Process() { StartInfo = new ProcessStartInfo() { FileName = "notepad", ArgumentList = { localsshcfg }, LoadUserProfile = true, UseShellExecute = true } };
             _ = proc.Start();
             proc.WaitForExit();
             model.Clear();

@@ -21,7 +21,7 @@ namespace SSHMan
 
         /// <summary>
         /// Tell bound controls (via WPF binding) to refresh their display.
-        /// 
+        ///
         /// Sample call: this.NotifyPropertyChanged(() => this.IsSelected);
         /// where 'this' is derived from <seealso cref="DefaultModel"/>
         /// and IsSelected is a property.
@@ -30,6 +30,7 @@ namespace SSHMan
         /// <param name="property"></param>
         public void RaisePropertyChanged<TProperty>(Expression<Func<TProperty>> property)
         {
+            if(property == null) {throw new ArgumentNullException(nameof(property));}
             var lambda = (LambdaExpression)property;
             var memberExpression = lambda.Body is UnaryExpression unaryExpression ? (MemberExpression)unaryExpression.Operand : (MemberExpression)lambda.Body;
             this.RaisePropertyChanged(memberExpression.Member.Name);

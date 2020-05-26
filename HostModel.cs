@@ -8,8 +8,6 @@ namespace SSHMan
 {
     class HostModel : DefaultModel
     {
-        private readonly SSHParser parser = new SSHParser();
-
         public HostModel() => this.ReadConfig();
 
 
@@ -17,7 +15,7 @@ namespace SSHMan
         {
             Items.Clear();
             RaisePropertyChanged(() => Items);
-            var hostMap = parser.HostMap();
+            var hostMap = SSHParser.MapHosts();
             foreach ((_, var config) in hostMap)
             {
                 Items.Add(config.ToEntry());
@@ -30,7 +28,7 @@ namespace SSHMan
             Items.Clear();
             RaisePropertyChanged(() => Items);
         }
-        
+
 
         public void Update()
         {
