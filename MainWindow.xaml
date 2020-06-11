@@ -14,11 +14,14 @@
     </mah:MetroWindow.RightWindowCommands>
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl>
-            <mah:Flyout x:Name="settingsFlyout" Header="Settings" Position="Right" Width="200">
-                <StackPanel Margin="16,0,16,0" Orientation="Vertical">
-                    <mah:ToggleSwitch Margin="0 10 0 5" Header="Keep Launcher open" IsOn="True" Name="launcherToggle" Toggled="LauncherToggleToggled" />
-                    <Button Width="168" x:Name="configBnt" Content="Open SSH Config" Click="ConfigClick"></Button>
-                </StackPanel>
+            <mah:Flyout x:Name="settingsFlyout" Header="Settings" Position="Right" Width="220">
+                <DockPanel Margin="24,0,16,0" Height="Auto">
+                    <mah:ToggleSwitch DockPanel.Dock="Top"  Margin="0 10 0 5" Header="Keep Launcher open" IsOn="True" Name="launcherToggle" Toggled="LauncherToggleToggled" />
+                    <WrapPanel DockPanel.Dock="Bottom" Orientation="Vertical">
+                        <Button Margin="4" Width="Auto" x:Name="ExportProfiles" Click="ExportProfiles_Click">Create Terminal Profiles</Button>
+                        <Button Margin="4" Width="Auto" x:Name="configBnt" Content="Open SSH Config" Click="ConfigClick"></Button>
+                    </WrapPanel>
+                </DockPanel>
             </mah:Flyout>
         </mah:FlyoutsControl>
     </mah:MetroWindow.Flyouts>
@@ -87,12 +90,14 @@
 
             <Grid DockPanel.Dock="Bottom" Margin="0,16,0,4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="8"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="8"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="3" x:Name="ConnectBnt" Click="Connect_Click">Connect</Button>
+               
+                <Button Grid.Column="4" x:Name="ConnectBnt" Click="Connect_Click">Connect</Button>
             </Grid>
         </DockPanel>
 

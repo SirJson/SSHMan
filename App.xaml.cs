@@ -80,6 +80,11 @@ namespace SSHMan
             }
         }
 
+        internal static void AnnounceSessionEnd(Guid workId)
+        {
+            throw new NotImplementedException();
+        }
+
         private void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
             // If we exit because of any other reason than the happy path the mutex might still exist so we better kill it here

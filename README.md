@@ -2,16 +2,23 @@
 
 A Windows Terminal launcher for SSH connections defined in your local SSH config. `(~/.ssh/config)`
 
-![screenshot-a](screenshot-a.PNG)
-
+![screenshot-a](other/screenshot-a.PNG)
 
 It basically parses your user SSH config and creates a list of all entries. On connect it will open the new Windows Terminal and connect to the selected Server.
 
-This is an easy alternative to creating a profile inside your Terminal config for every remote connection you already have in your SSH config.
+This is an easy alternative to creating a profile inside your Terminal config for every remote connection you already have in your SSH config. 
 
 Don't have a SSH config yet? Create one directly from the settings menu! If you change something it will automatically be applied in SSHMan as well.
 
-![screenshot-b](screenshot-b.PNG)
+Not fancy another program just to start your SSH sessions? SSHMan can export all Hosts from your SSH config into new Windows Terminal Profiles or update your Profile List if changes are detected.
+
+To use this feature open the settings menu
+
+![configbnt](other/configbnt.PNG)
+
+and press the "Create Terminal Profiles" Button
+
+![export](other/export.PNG)
 
 ## Installation
 
@@ -21,20 +28,6 @@ This project depends on
 -   PowerShell 6+
 
 If you have PowerShell 6 or 7 installed and the Windows Terminal it will automatically make sure that you also have the included `ReadNamedPipe` Module and the launcher script installed. 
-
-All you need to do is define a Profile inside your Terminal config with the name `Remote`. Here you can choose what ever settings you like for your remote connections like font or color scheme.
-
-This is the profile I use, you can use this as an example or just use it as is
-
-```json
-            {
-                "guid": "{8954ce30-29ac-4335-997a-4a96c00ded5a}",
-                "hidden": false,
-                "name": "Remote"
-            }
-```
-
-
 
 ## How this works
 

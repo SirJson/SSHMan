@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using static System.Environment;
@@ -20,7 +21,7 @@ namespace SSHMan
 
             if (!File.Exists(localsshcfg))
             {
-                File.WriteAllText(localsshcfg, Scripts.example_ssh);
+                File.WriteAllText(localsshcfg, Encoding.UTF8.GetString(Scripts.ssh));
             }
 
             var output = new Dictionary<string, ConfigEntry> ();

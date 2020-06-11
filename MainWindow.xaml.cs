@@ -119,7 +119,7 @@ namespace SSHMan
 
             if (!File.Exists(localsshcfg))
             {
-                File.WriteAllText(localsshcfg, Scripts.example_ssh);
+                File.WriteAllText(localsshcfg, Encoding.UTF8.GetString(Scripts.ssh));
             }
 
             using var proc = new Process() { StartInfo = new ProcessStartInfo() { FileName = "notepad", ArgumentList = { localsshcfg }, LoadUserProfile = true, UseShellExecute = true } };
@@ -155,6 +155,18 @@ namespace SSHMan
         {
             var host = this.sshMenu.SelectedItem as SSHHostEntry;
             Connect(host);
+        }
+
+        private void ExportProfiles_Click(object sender, RoutedEventArgs e)
+        {
+            var exporter = new SSHToProfileConverter();
+            var json = exporter.GenerateSettings();
+
+
+            var backupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(exporter.WtSettings) + ".bak");
+            File.Copy(exporter.WtSettings, backupPath, true);
+            File.WriteAllText(exporter.WtSettings, json);
+            MessageBox.Show($"Successfully exported all know SSH hosts into Windows Terminal profiles.\nA backup from your old config has been created at\n\n{backupPath}", "Profiles exported", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

@@ -22,14 +22,14 @@ namespace SSHMan {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Scripts {
+    internal class LangDefault {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Scripts() {
+        internal LangDefault() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace SSHMan {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SSHMan.Scripts", typeof(Scripts).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SSHMan.LangDefault", typeof(LangDefault).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,42 +61,47 @@ namespace SSHMan {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to Abort.
         /// </summary>
-        internal static byte[] ModuleDefinition {
+        internal static string Abort {
             get {
-                object obj = ResourceManager.GetObject("ModuleDefinition", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("Abort", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to Failed to allocate console.
         /// </summary>
-        internal static byte[] ReadNamedPipeCmdlet {
+        internal static string ConAllocError {
             get {
-                object obj = ResourceManager.GetObject("ReadNamedPipeCmdlet", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("ConAllocError", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to Connection failed.
         /// </summary>
-        internal static byte[] ssh {
+        internal static string ConnectionFail {
             get {
-                object obj = ResourceManager.GetObject("ssh", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("ConnectionFail", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static byte[] sshchild {
+        internal static string Error {
             get {
-                object obj = ResourceManager.GetObject("sshchild", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Panic.
+        /// </summary>
+        internal static string Panic {
+            get {
+                return ResourceManager.GetString("Panic", resourceCulture);
             }
         }
     }

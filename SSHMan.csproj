@@ -9,12 +9,13 @@
     <Authors>SirJson</Authors>
     <Company>SirJson</Company>
     <Description>Quickly connect to your SSH server</Description>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/SirJson/SSHMan</PackageProjectUrl>
     <PackageIcon>sshman-icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/SirJson/SSHMan</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageTags>windows-terminal, ssh</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,8 +23,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="assets\**" />
     <Compile Remove="SSHChild\**" />
+    <EmbeddedResource Remove="assets\**" />
     <EmbeddedResource Remove="SSHChild\**" />
+    <None Remove="assets\**" />
     <None Remove="SSHChild\**" />
     <None Include="LICENSE">
       <Pack>True</Pack>
@@ -33,6 +37,7 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+    <Page Remove="assets\**" />
     <Page Remove="SSHChild\**" />
   </ItemGroup>
 
@@ -48,13 +53,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Serilog" Version="2.10.0-dev-01187" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0-dev-00839" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0-dev-00880" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="assets\" />
   </ItemGroup>
 
   <ItemGroup>
