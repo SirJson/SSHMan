@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,8 +8,8 @@ namespace SSHMan {
         public string Host { get; set; }
         public Dictionary<string, string> Data { get; private set; }
 
-        const string CfgKeyHost = "hostname";
-        const string CfgKeyPort = "port";
+        const string CfgKeyHost = "HOSTNAME";
+        const string CfgKeyPort = "PORT";
 
         public static ConfigEntry Create (string host, string port) {
             return new ConfigEntry () {
