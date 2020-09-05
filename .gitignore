@@ -415,3 +415,6 @@ healthchecksdb
 MigrationBackup/
 
 # End of https://www.gitignore.io/api/visualstudio
+icon-dark.svg
+icon-light.svg
+template.json

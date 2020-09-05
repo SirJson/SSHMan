@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using Serilog;
 
 namespace SSHMan
 {
-    public class SSHToProfileConverter
+    public static class SSHToProfileConverter
     {
-        public string WtSettings { get; private set; }
-        public SSHToProfileConverter()
+        public static (bool,string) GenerateSettings(string file)
         {
-            WtSettings = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Packages", "Microsoft.WindowsTerminal_8wekyb3d8bbwe", "LocalState", "settings.json");
-        }
-
-        public string GenerateSettings()
-        {
-            var json = File.ReadAllText(WtSettings);
+            if(!File.Exists(file)) {
+                Log.Warning("Skipped terminal settings update because '{file}' doesn't exist", file);
+                return (false,string.Empty); // If the file doesn't exist that's okay
+            }
+            var json = File.ReadAllText(file);
             var cfg = TerminalConfig.FromJson(json);
             var hosts = SSHParser.MapHosts();
             if (cfg.Profiles.HasValue)
@@ -43,7 +41,7 @@ namespace SSHMan
                 cfg.Profiles = profiles;
             }
 
-            return cfg.ToJson();
+            return (true,cfg.ToJson());
 
         }
     }

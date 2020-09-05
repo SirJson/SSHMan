@@ -23,7 +23,7 @@ namespace SSHMan
         private bool keepOpen = true;
         private readonly Dictionary<Guid, Thread> threads = new Dictionary<Guid, Thread>();
         private readonly ConcurrentBag<Guid> deadThreads = new ConcurrentBag<Guid>();
-        public readonly static ManualResetEventSlim ShutdownSignal = new ManualResetEventSlim(false);
+        public static readonly ManualResetEventSlim ShutdownSignal = new ManualResetEventSlim(false);
 
 
         public MainWindow()
@@ -46,7 +46,7 @@ namespace SSHMan
 
             var wtpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Microsoft", "WindowsApps", "wt.exe");
             Log.Information("Executing client script...");
-            using (var proc = new Process()
+            using var proc = new Process()
             {
                 StartInfo = new ProcessStartInfo()
                 {
@@ -58,16 +58,14 @@ namespace SSHMan
                 },
                 EnableRaisingEvents = true,
 
-            })
-            {
-                proc.Exited += this.Proc_Exited;
-                proc.ErrorDataReceived += this.Proc_ErrorDataReceived;
-                var success = proc.Start();
-                Debug.Assert(success);
-                Log.Debug("Thread ({thread}) initialized and running", Thread.CurrentThread.ManagedThreadId);
-                proc.WaitForExit();
-                Log.Debug("Process for thread ({thread}) exited", Thread.CurrentThread.ManagedThreadId);
-            }
+            };
+            proc.Exited += this.Proc_Exited;
+            proc.ErrorDataReceived += this.Proc_ErrorDataReceived;
+            var success = proc.Start();
+            Debug.Assert(success);
+            Log.Debug("Thread ({thread}) initialized and running", Thread.CurrentThread.ManagedThreadId);
+            proc.WaitForExit();
+            Log.Debug("Process for thread ({thread}) exited", Thread.CurrentThread.ManagedThreadId);
         }
 
         private void Proc_ErrorDataReceived(object sender, DataReceivedEventArgs e) => Log.Error("SSH Error: {error}", e.Data);
@@ -159,14 +157,29 @@ namespace SSHMan
 
         private void ExportProfiles_Click(object sender, RoutedEventArgs e)
         {
-            var exporter = new SSHToProfileConverter();
-            var json = exporter.GenerateSettings();
+            var (stableExists, stableJson) = SSHToProfileConverter.GenerateSettings(App.WtSettings);
+            var (previewExists, previewJson) = SSHToProfileConverter.GenerateSettings(App.WtPreviewSettings);
+            var backupPaths = new List<string>();
 
+            if (stableExists)
+            {
+                backupPaths.Add(App.BackupFile(App.WtSettings, "stable-"));
+                File.WriteAllText(App.WtSettings, stableJson);
+            }
 
-            var backupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Path.GetFileName(exporter.WtSettings) + ".bak");
-            File.Copy(exporter.WtSettings, backupPath, true);
-            File.WriteAllText(exporter.WtSettings, json);
-            MessageBox.Show($"Successfully exported all know SSH hosts into Windows Terminal profiles.\nA backup from your old config has been created at\n\n{backupPath}", "Profiles exported", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (previewExists)
+            {
+                backupPaths.Add(App.BackupFile(App.WtPreviewSettings, "preview-"));
+                File.WriteAllText(App.WtPreviewSettings, previewJson);
+            }
+
+            var message = "Successfully exported all know SSH hosts into Windows Terminal profiles.\nA backup from your old config(s) can be found here:";
+            foreach (var path in backupPaths)
+            {
+                message += $"\n\n - {path}";
+            }
+
+            MessageBox.Show(message, "Profiles exported", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

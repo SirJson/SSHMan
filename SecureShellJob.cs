@@ -14,8 +14,7 @@ namespace SSHMan
     {
         public readonly Guid ID;
         private Thread worker;
-        private string hostname;
-        private Process proccess;
+        private readonly string hostname;
 
         public SecureShellJob(string host)
         {

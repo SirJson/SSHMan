@@ -1,0 +1,10 @@
+{
+    "FileOptions": {
+        "SystemExcludeSearchPatterns": [
+            "**/node_modules/**/*",
+            "**/bin/**/*",
+            "**/obj/**/*",
+            "**/.git/**/*"
+        ]
+    }
+}
