@@ -34,7 +34,7 @@ namespace SSHMan
             }
         }
 
-        public static string BackupFile(string file,string prefix="")
+        public static string BackupFile(string file, string prefix = "")
         {
             var backupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), prefix + Path.GetFileName(file) + ".bak");
             File.Copy(file, backupPath, true);
@@ -72,9 +72,18 @@ namespace SSHMan
 
                 EnsureDirectory(DataPath);
 
-                if (e.Args.Length > 0 && e.Args[0] == "-d")
+                if (e.Args.Length > 0)
                 {
-                    DebugLogger();
+                    switch (e.Args[0])
+                    {
+                        case "--debugdev":
+                            DebugLogger();
+                            break;
+                        case "--debug":
+                            ExternalDebugLogger();
+                            break;
+                    }
+
                 }
                 else
                 {
@@ -104,18 +113,29 @@ namespace SSHMan
             singleAppMutex.Dispose();
         }
 
-        private static void DebugLogger()
+        private static void ExternalDebugLogger()
         {
             if (!NativeMethods.AllocConsole())
             {
                 Panic("Failed to allocate console");
             }
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File(LogPath, rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+                Log.Information("Using user debug console");
+        }
+
+        private static void DebugLogger()
+        {
 
             Log.Logger = new LoggerConfiguration()
-                            .MinimumLevel.Debug()
-                            .WriteTo.Console()
-                            .WriteTo.File(LogPath, rollingInterval: RollingInterval.Day)
-                            .CreateLogger();
+                .MinimumLevel.Debug()
+                .WriteTo.Debug()
+                .WriteTo.File(LogPath, rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            Log.Information("Using developer debug console");
         }
 
         private static void StandardLogger()
